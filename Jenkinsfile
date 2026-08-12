@@ -4,6 +4,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo 'Checking out project...'
@@ -13,22 +14,25 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                echo 'Creating Python virtual environment...'
+                sh 'python3 -m venv venv'
+
                 echo 'Installing dependencies...'
-                sh 'python3 -m pip install --user -r requirements.txt'
+                sh 'venv/bin/pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                sh 'python3 -m pytest'
+                sh 'venv/bin/pytest'
             }
         }
 
         stage('Run Application') {
             steps {
                 echo 'Running application...'
-                sh 'python3 app.py'
+                sh 'venv/bin/python app.py'
             }
         }
     }
